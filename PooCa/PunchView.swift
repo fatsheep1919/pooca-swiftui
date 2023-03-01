@@ -17,7 +17,21 @@ struct PunchView: View {
     var content = ""
     if pooStore.loaded {
       if pooStore.pooOfToday.count == 0 {
-        content = "今天还没拉屎"
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+
+        var noPooDays = 0
+        if (pooStore.pooArr.count > 0) {
+          let index = pooStore.pooArr.count - 1
+          let date = formatter.date(from: pooStore.pooArr[index].date)!
+          noPooDays = Calendar.current.dateComponents([.day], from: date, to: Date()).day ?? 0
+        }
+
+        if noPooDays > 1 {
+          content = "\(noPooDays)天没拉屎了。。"
+        } else {
+          content = "今天还没拉屎"
+        }
       } else {
         content = "今天拉\(pooStore.pooOfToday.count)次了"
       }
